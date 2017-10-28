@@ -1,4 +1,3 @@
-import collapse from 'collapse-white-space';
 import { isValidElement } from 'react';
 import stringify from 'stringify-object';
 import sortobject from 'sortobject';
@@ -33,7 +32,8 @@ export default (value, inline, lvl, options) => {
   });
 
   if (inline) {
-    return collapse(stringifiedValue)
+    return stringifiedValue
+      .replace(/\s+/g, ' ')
       .replace(/{ /g, '{')
       .replace(/ }/g, '}')
       .replace(/\[ /g, '[')
