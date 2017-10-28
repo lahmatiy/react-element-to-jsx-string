@@ -9,25 +9,11 @@ const compensateMultilineStringElementIndentation = (
   formattedElement,
   inline,
   lvl,
-  options
-) => {
-  const { tabStop } = options;
-
-  if (element.type === 'string') {
-    return formattedElement
-      .split('\n')
-      .map((line, offset) => {
-        if (offset === 0) {
-          return line;
-        }
-
-        return `${spacer(lvl, tabStop)}${line}`;
-      })
-      .join('\n');
-  }
-
-  return formattedElement;
-};
+  { tabStop }
+) =>
+  element.type === 'string'
+    ? formattedElement.replace(/\n/g, `\n${spacer(lvl, tabStop)}`)
+    : formattedElement;
 
 const formatOneChildren = (inline, lvl, options) => element =>
   compensateMultilineStringElementIndentation(
@@ -37,14 +23,6 @@ const formatOneChildren = (inline, lvl, options) => element =>
     lvl,
     options
   );
-
-const onlyPropsWithOriginalValue = (defaultProps, props) => propName => {
-  const haveDefaultValue = Object.keys(defaultProps).includes(propName);
-  return (
-    !haveDefaultValue ||
-    (haveDefaultValue && defaultProps[propName] !== props[propName])
-  );
-};
 
 const isInlineAttributeTooLong = (
   attributes,
@@ -86,7 +64,7 @@ export default (node, inline, lvl, options) => {
   const {
     type,
     displayName = '',
-    childrens,
+    children,
     props = {},
     defaultProps = {},
   } = node;
@@ -111,18 +89,24 @@ export default (node, inline, lvl, options) => {
   let outMultilineAttr = out;
   let containsMultilineAttr = false;
 
-  const visibleAttributeNames = [];
+  const propNames = Object.keys(props);
+  const defaultPropNames = Object.keys(defaultProps);
 
-  Object.keys(props)
-    .filter(propName => filterProps.indexOf(propName) === -1)
-    .filter(onlyPropsWithOriginalValue(defaultProps, props))
-    .forEach(propName => visibleAttributeNames.push(propName));
+  const visibleAttributeNames = propNames.filter(
+    propName =>
+      filterProps.includes(propName) === false &&
+      defaultProps[propName] !== props[propName]
+  );
 
-  Object.keys(defaultProps)
-    .filter(defaultPropName => filterProps.indexOf(defaultPropName) === -1)
-    .filter(() => showDefaultProps)
-    .filter(defaultPropName => !visibleAttributeNames.includes(defaultPropName))
-    .forEach(defaultPropName => visibleAttributeNames.push(defaultPropName));
+  if (showDefaultProps) {
+    visibleAttributeNames.push(
+      ...defaultPropNames.filter(
+        defaultPropName =>
+          !filterProps.includes(defaultPropName) &&
+          !visibleAttributeNames.includes(defaultPropName)
+      )
+    );
+  }
 
   const attributes = visibleAttributeNames.sort(propNameSorter(sortProps));
 
@@ -133,9 +117,9 @@ export default (node, inline, lvl, options) => {
       isMultilineAttribute,
     } = formatProp(
       attributeName,
-      Object.keys(props).includes(attributeName),
+      propNames.includes(attributeName),
       props[attributeName],
-      Object.keys(defaultProps).includes(attributeName),
+      defaultPropNames.includes(attributeName),
       defaultProps[attributeName],
       inline,
       lvl,
@@ -168,7 +152,7 @@ export default (node, inline, lvl, options) => {
     out = outInlineAttr;
   }
 
-  if (childrens && childrens.length > 0) {
+  if (children && children.length > 0) {
     const newLvl = lvl + 1;
 
     out += '>';
@@ -178,7 +162,7 @@ export default (node, inline, lvl, options) => {
       out += spacer(newLvl, tabStop);
     }
 
-    out += childrens
+    out += children
       .reduce(mergeSiblingPlainStringChildrenReducer, [])
       .map(formatOneChildren(inline, newLvl, options))
       .join(`\n${spacer(newLvl, tabStop)}`);

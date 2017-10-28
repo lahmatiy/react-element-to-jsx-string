@@ -10,7 +10,7 @@ describe('parseReactElement', () => {
       displayName: 'h1',
       defaultProps: {},
       props: {},
-      childrens: [
+      children: [
         {
           type: 'string',
           value: 'Hello world',
@@ -19,7 +19,7 @@ describe('parseReactElement', () => {
     });
   });
 
-  it('should filter empty childrens', () => {
+  it('should filter empty children', () => {
     expect(
       parseReactElement(
         <h1>
@@ -37,7 +37,7 @@ describe('parseReactElement', () => {
       displayName: 'h1',
       defaultProps: {},
       props: {},
-      childrens: [
+      children: [
         {
           type: 'string',
           value: 'Hello',
@@ -58,7 +58,7 @@ describe('parseReactElement', () => {
         foo: '41',
       },
       defaultProps: {},
-      childrens: [],
+      children: [],
     });
   });
 
@@ -72,7 +72,7 @@ describe('parseReactElement', () => {
       props: {
         a: { aa: '1', bb: { cc: '3' } },
       },
-      childrens: [],
+      children: [],
     });
   });
 
@@ -84,7 +84,7 @@ describe('parseReactElement', () => {
       props: {
         a: <span b="42" />,
       },
-      childrens: [],
+      children: [],
     });
   });
 
@@ -109,7 +109,7 @@ describe('parseReactElement', () => {
         baz: 'Hello Baz!',
         foo: 'Hello Foo!',
       },
-      childrens: [],
+      children: [],
     });
   });
 
@@ -121,7 +121,7 @@ describe('parseReactElement', () => {
       props: {
         key: 'foo-1',
       },
-      childrens: [],
+      children: [],
     });
   });
 
@@ -135,7 +135,7 @@ describe('parseReactElement', () => {
       props: {
         ref: refFn,
       },
-      childrens: [],
+      children: [],
     });
 
     // eslint-disable-next-line react/no-string-refs
@@ -146,7 +146,7 @@ describe('parseReactElement', () => {
       props: {
         ref: 'foo',
       },
-      childrens: [],
+      children: [],
     });
   });
 });

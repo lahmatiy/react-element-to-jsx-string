@@ -1,7 +1,1 @@
-export default (times, tabStop) => {
-  if (times === 0) {
-    return '';
-  }
-
-  return new Array(times * tabStop).fill(' ').join('');
-};
+export default (times, tabStop) => new Array(times * tabStop + 1).join(' ');

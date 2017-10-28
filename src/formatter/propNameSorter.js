@@ -1,11 +1,9 @@
 export default sortProps => (a, b) => {
   if (a === b) {
     return 0;
-  }
-
-  if (['key', 'ref'].includes(a)) {
+  } else if (a === 'key' || a === 'ref') {
     return -1;
-  } else if (['key', 'ref'].includes(b)) {
+  } else if (b === 'key' || b === 'ref') {
     return 1;
   }
 

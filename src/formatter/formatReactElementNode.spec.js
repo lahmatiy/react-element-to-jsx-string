@@ -17,7 +17,7 @@ describe('formatReactElementNode', () => {
       displayName: 'h1',
       defaultProps: {},
       props: {},
-      childrens: [
+      children: [
         {
           value: 'Hello world',
           type: 'string',
@@ -42,7 +42,7 @@ describe('formatReactElementNode', () => {
       defaultProps: {
         foo: '41',
       },
-      childrens: [],
+      children: [],
     };
 
     expect(formatReactElementNode(tree, false, 0, defaultOptions)).toEqual(
@@ -60,7 +60,7 @@ describe('formatReactElementNode', () => {
       props: {
         a: { aa: '1', bb: { cc: '3' } },
       },
-      childrens: [],
+      children: [],
     };
 
     expect(formatReactElementNode(tree, false, 0, defaultOptions)).toEqual(
@@ -85,7 +85,7 @@ describe('formatReactElementNode', () => {
       props: {
         a: <span b="42" />,
       },
-      childrens: [],
+      children: [],
     };
 
     expect(formatReactElementNode(tree, false, 0, defaultOptions)).toEqual(
@@ -99,7 +99,7 @@ describe('formatReactElementNode', () => {
       displayName: 'div',
       defaultProps: {},
       props: {},
-      childrens: [
+      children: [
         {
           type: 'string',
           value: 'first line\nsecond line\nthird line',

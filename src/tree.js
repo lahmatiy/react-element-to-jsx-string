@@ -12,11 +12,11 @@ export const createReactElementTreeNode = (
   displayName,
   props,
   defaultProps,
-  childrens
+  children
 ) => ({
   type: 'ReactElement',
   displayName,
   props,
   defaultProps,
-  childrens,
+  children,
 });

@@ -6,13 +6,13 @@ import {
 } from '../tree';
 
 test('mergeSiblingPlainStringChildrenReducer should merge sibling string tree nodes', () => {
-  const childrens = [
+  const children = [
     createStringTreeNode('a'),
     createStringTreeNode('b'),
     createStringTreeNode('c'),
   ];
 
-  expect(childrens.reduce(mergeSiblingPlainStringChildrenReducer, [])).toEqual([
+  expect(children.reduce(mergeSiblingPlainStringChildrenReducer, [])).toEqual([
     {
       type: 'string',
       value: 'abc',
@@ -49,7 +49,7 @@ test('mergeSiblingPlainStringChildrenReducer should consider number as string', 
 });
 
 test('mergeSiblingPlainStringChildrenReducer should detect non string node', () => {
-  const childrens = [
+  const children = [
     createReactElementTreeNode('MyFoo', {}, {}, ['foo']),
     createStringTreeNode('a'),
     createNumberTreeNode('b'),
@@ -59,13 +59,13 @@ test('mergeSiblingPlainStringChildrenReducer should detect non string node', () 
     createReactElementTreeNode('MyBaz', {}, {}, ['baz']),
   ];
 
-  expect(childrens.reduce(mergeSiblingPlainStringChildrenReducer, [])).toEqual([
+  expect(children.reduce(mergeSiblingPlainStringChildrenReducer, [])).toEqual([
     {
       type: 'ReactElement',
       displayName: 'MyFoo',
       props: {},
       defaultProps: {},
-      childrens: ['foo'],
+      children: ['foo'],
     },
     {
       type: 'string',
@@ -76,7 +76,7 @@ test('mergeSiblingPlainStringChildrenReducer should detect non string node', () 
       displayName: 'MyBar',
       props: {},
       defaultProps: {},
-      childrens: ['bar'],
+      children: ['bar'],
     },
     {
       type: 'string',
@@ -87,7 +87,7 @@ test('mergeSiblingPlainStringChildrenReducer should detect non string node', () 
       displayName: 'MyBaz',
       props: {},
       defaultProps: {},
-      childrens: ['baz'],
+      children: ['baz'],
     },
   ]);
 });

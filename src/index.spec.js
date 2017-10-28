@@ -3,9 +3,14 @@
 import React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
 import reactElementToJSXString from './index';
-import AnonymousStatelessComponent from './AnonymousStatelessComponent';
 
 class TestComponent extends React.Component {}
+
+const AnonymousStatelessComponent = (() =>
+  function(props) {
+    const { children } = props; // eslint-disable-line react/prop-types
+    return <div>{children}</div>;
+  })();
 
 function NamedStatelessComponent(props) {
   const { children } = props; // eslint-disable-line react/prop-types
@@ -554,19 +559,20 @@ describe('reactElementToJSXString(ReactElement)', () => {
     );
   });
 
-  it('reactElementToJSXString(<div>\nfoo <span>bar</span> baz\n</div>)', () => {
+  it('reactElementToJSXString(<div>\n<br /> foo xxx <span>bar</span> xxx baz\n</div>)', () => {
     expect(
       reactElementToJSXString(
         <div>
-          foo <span>bar</span> baz
+          <br /> foo xxx <span>bar</span> xxx baz
         </div>
       )
     ).toEqual(`<div>
-  foo{' '}
+  <br />
+  {' '}foo xxx{' '}
   <span>
     bar
   </span>
-  {' '}baz
+  {' '}xxx baz
 </div>`);
   });
 

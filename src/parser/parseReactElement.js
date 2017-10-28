@@ -3,8 +3,9 @@ import {
   createStringTreeNode,
   createNumberTreeNode,
   createReactElementTreeNode,
-} from './../tree';
+} from '../tree';
 
+const { hasOwnProperty } = Object.prototype;
 const getReactElementDisplayName = element =>
   element.type.displayName ||
   element.type.name || // function name
@@ -12,62 +13,67 @@ const getReactElementDisplayName = element =>
     ? 'No Display Name'
     : element.type);
 
-const noChildren = (propsValue, propName) => propName !== 'children';
-
 const onlyMeaningfulChildren = children =>
   children !== true &&
   children !== false &&
   children !== null &&
   children !== '';
 
-const filterProps = (originalProps, cb) => {
+const filterProps = props => {
   const filteredProps = {};
 
-  Object.keys(originalProps)
-    .filter(key => cb(originalProps[key], key))
-    .forEach(key => (filteredProps[key] = originalProps[key]));
+  for (const key in props) {
+    if (hasOwnProperty.call(props, key) && key !== 'children') {
+      filteredProps[key] = props[key];
+    }
+  }
 
   return filteredProps;
 };
 
-const parseReactElement = (element, options) => {
-  const { displayName: displayNameFn = getReactElementDisplayName } = options;
+/* eslint-disable no-use-before-define */
+export default function parse(root, options) {
+  function parseReactElement(element) {
+    switch (typeof element) {
+      case 'string':
+        return createStringTreeNode(element);
 
-  if (typeof element === 'string') {
-    return createStringTreeNode(element);
-  } else if (typeof element === 'number') {
-    return createNumberTreeNode(element);
-  } else if (!React.isValidElement(element)) {
-    throw new Error(
-      `react-element-to-jsx-string: Expected a React.Element, got \`${typeof element}\``
+      case 'number':
+        return createNumberTreeNode(element);
+
+      default:
+        if (!React.isValidElement(element)) {
+          throw new Error(
+            `react-element-to-jsx-string: Expected a React.Element, got \`${typeof element}\``
+          );
+        }
+    }
+
+    const props = filterProps(element.props);
+    const defaultProps = filterProps(element.type.defaultProps || {});
+    const children = React.Children
+      .toArray(element.props.children)
+      .filter(onlyMeaningfulChildren)
+      .map(parseReactElement);
+
+    if (element.ref !== null) {
+      props.ref = element.ref;
+    }
+
+    if (typeof element.key === 'string' && element.key[0] !== '.') {
+      // React automatically add key=".X" when there are some children
+      props.key = element.key;
+    }
+
+    return createReactElementTreeNode(
+      displayNameFn(element),
+      props,
+      defaultProps,
+      children
     );
   }
 
-  const displayName = displayNameFn(element);
+  const displayNameFn = options.displayName || getReactElementDisplayName;
 
-  const props = filterProps(element.props, noChildren);
-  if (element.ref !== null) {
-    props.ref = element.ref;
-  }
-
-  const key = element.key;
-  if (typeof key === 'string' && key.search(/^\./)) {
-    // React automatically add key=".X" when there are some children
-    props.key = key;
-  }
-
-  const defaultProps = filterProps(element.type.defaultProps || {}, noChildren);
-  const childrens = React.Children
-    .toArray(element.props.children)
-    .filter(onlyMeaningfulChildren)
-    .map(child => parseReactElement(child, options));
-
-  return createReactElementTreeNode(
-    displayName,
-    props,
-    defaultProps,
-    childrens
-  );
-};
-
-export default parseReactElement;
+  return parseReactElement(root);
+}

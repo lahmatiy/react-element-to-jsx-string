@@ -6,38 +6,31 @@ import parseReactElement from '../parser/parseReactElement';
 
 const noRefCheck = () => {};
 const escape = s => s.replace(/"/g, '&quot;');
-
 const defaultFunctionValue = fn => fn;
 
-const formatPropValue = (propValue, inline, lvl, options) => {
-  if (typeof propValue === 'number') {
-    return `{${String(propValue)}}`;
-  }
+export default (propValue, inline, lvl, options) => {
+  switch (typeof propValue) {
+    case 'number':
+      return `{${String(propValue)}}`;
 
-  if (typeof propValue === 'string') {
-    return `"${escape(propValue)}"`;
-  }
+    case 'string':
+      return `"${escape(propValue)}"`;
 
-  if (typeof propValue === 'symbol') {
-    const symbolDescription = propValue
-      .valueOf()
-      .toString()
-      .replace(/Symbol\((.*)\)/, '$1');
+    case 'symbol':
+      return String(propValue).replace(
+        /^Symbol\((.*)\)$/,
+        (m, ref) => (ref ? `{Symbol('${ref}')}` : `{Symbol()}`)
+      );
 
-    if (!symbolDescription) {
-      return `{Symbol()}`;
+    case 'function': {
+      const { functionValue = defaultFunctionValue, showFunctions } = options;
+
+      return showFunctions || functionValue !== defaultFunctionValue
+        ? `{${functionValue(propValue)}}`
+        : `{${noRefCheck}}`;
     }
 
-    return `{Symbol('${symbolDescription}')}`;
-  }
-
-  if (typeof propValue === 'function') {
-    const { functionValue = defaultFunctionValue, showFunctions } = options;
-    if (!showFunctions && functionValue === defaultFunctionValue) {
-      return `{${functionValue(noRefCheck)}}`;
-    }
-
-    return `{${functionValue(propValue)}}`;
+    default:
   }
 
   if (isValidElement(propValue)) {
@@ -59,5 +52,3 @@ const formatPropValue = (propValue, inline, lvl, options) => {
 
   return `{${String(propValue)}}`;
 };
-
-export default formatPropValue;

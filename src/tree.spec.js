@@ -33,7 +33,7 @@ describe('createReactElementTreeNode', () => {
       displayName: 'MyComponent',
       props: { foo: 42 },
       defaultProps: { bar: 51 },
-      childrens: ['abc'],
+      children: ['abc'],
     });
   });
 });

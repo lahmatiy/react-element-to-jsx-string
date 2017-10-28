@@ -1,28 +1,12 @@
-import { createStringTreeNode } from '../tree';
+const isGoodToMerge = node => node.type === 'string' || node.type === 'number';
 
-export default (previousNodes, currentNode) => {
-  const nodes = previousNodes.slice(
-    0,
-    previousNodes.length > 0 ? previousNodes.length - 1 : 0
-  );
-  const previousNode = previousNodes[previousNodes.length - 1];
+export default (nodes, current) => {
+  const prev = nodes[nodes.length - 1];
 
-  if (
-    previousNode &&
-    (currentNode.type === 'string' || currentNode.type === 'number') &&
-    (previousNode.type === 'string' || previousNode.type === 'number')
-  ) {
-    nodes.push(
-      createStringTreeNode(
-        String(previousNode.value) + String(currentNode.value)
-      )
-    );
+  if (prev && isGoodToMerge(prev) && isGoodToMerge(current)) {
+    prev.value += String(current.value);
   } else {
-    if (previousNode) {
-      nodes.push(previousNode);
-    }
-
-    nodes.push(currentNode);
+    nodes.push(current);
   }
 
   return nodes;

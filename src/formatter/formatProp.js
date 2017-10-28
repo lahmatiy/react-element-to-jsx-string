@@ -36,8 +36,8 @@ export default (
     attributeFormattedInline = '';
     attributeFormattedMultiline = '';
   } else if (useBooleanShorthandSyntax && formattedPropValue === '{true}') {
-    attributeFormattedInline += `${name}`;
-    attributeFormattedMultiline += `${name}`;
+    attributeFormattedInline += name;
+    attributeFormattedMultiline += name;
   } else {
     attributeFormattedInline += `${name}=${formattedPropValue}`;
     attributeFormattedMultiline += `${name}=${formattedPropValue}`;
