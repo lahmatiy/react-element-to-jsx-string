@@ -17,6 +17,6 @@ export default (node, inline, lvl, options) => {
       return formatReactElementNode(node, inline, lvl, options);
 
     default:
-      throw new TypeError(`Unknow format type "${node.type}"`);
+      throw new TypeError(`Unknown format type "${node.type}"`);
   }
 };

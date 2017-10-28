@@ -1,4 +1,3 @@
-import { isValidElement } from 'react';
 import stringify from 'stringify-object';
 import sortobject from 'sortobject';
 import parseReactElement from '../parser/parseReactElement';
@@ -14,7 +13,7 @@ export default (value, inline, lvl, options) => {
     transform: (currentObj, prop, originalResult) => {
       const currentValue = currentObj[prop];
 
-      if (currentValue && isValidElement(currentValue)) {
+      if (currentValue && options.isValidElement(currentValue)) {
         return formatTreeNode(
           parseReactElement(currentValue, options),
           true,

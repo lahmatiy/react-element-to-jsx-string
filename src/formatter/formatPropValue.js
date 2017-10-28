@@ -1,5 +1,4 @@
 import isPlainObject from 'is-plain-object';
-import { isValidElement } from 'react';
 import formatComplexDataStructure from './formatComplexDataStructure';
 import formatTreeNode from './formatTreeNode';
 import parseReactElement from '../parser/parseReactElement';
@@ -33,7 +32,7 @@ export default (propValue, inline, lvl, options) => {
     default:
   }
 
-  if (isValidElement(propValue)) {
+  if (options.isValidElement(propValue)) {
     return `{${formatTreeNode(
       parseReactElement(propValue, options),
       true,

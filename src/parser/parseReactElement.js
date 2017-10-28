@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   createStringTreeNode,
   createNumberTreeNode,
@@ -31,6 +30,14 @@ const filterProps = props => {
   return filteredProps;
 };
 
+const childrenToArray = children => {
+  if (Array.isArray(children)) {
+    return children;
+  }
+
+  return children ? [children] : [];
+};
+
 /* eslint-disable no-use-before-define */
 export default function parse(root, options) {
   function parseReactElement(element) {
@@ -42,7 +49,7 @@ export default function parse(root, options) {
         return createNumberTreeNode(element);
 
       default:
-        if (!React.isValidElement(element)) {
+        if (!isValidElement(element)) {
           throw new Error(
             `react-element-to-jsx-string: Expected a React.Element, got \`${typeof element}\``
           );
@@ -51,8 +58,7 @@ export default function parse(root, options) {
 
     const props = filterProps(element.props);
     const defaultProps = filterProps(element.type.defaultProps || {});
-    const children = React.Children
-      .toArray(element.props.children)
+    const children = childrenToArray(element.props.children)
       .filter(onlyMeaningfulChildren)
       .map(parseReactElement);
 
@@ -66,14 +72,14 @@ export default function parse(root, options) {
     }
 
     return createReactElementTreeNode(
-      displayNameFn(element),
+      displayName(element),
       props,
       defaultProps,
       children
     );
   }
 
-  const displayNameFn = options.displayName || getReactElementDisplayName;
+  const { displayName = getReactElementDisplayName, isValidElement } = options;
 
   return parseReactElement(root);
 }

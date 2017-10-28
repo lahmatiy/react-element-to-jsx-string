@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { createRenderer } from 'react-test-renderer/shallow';
-import reactElementToJSXString from './index';
+import createReactElementToJSXString from './index';
+
+const reactElementToJSXString = createReactElementToJSXString(React);
 
 class TestComponent extends React.Component {}
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import parseReactElement from './parseReactElement';
 
-const options = {};
+const options = {
+  isValidElement: React.isValidElement,
+};
 
 describe('parseReactElement', () => {
   it('should parse a react element with a string as children', () => {

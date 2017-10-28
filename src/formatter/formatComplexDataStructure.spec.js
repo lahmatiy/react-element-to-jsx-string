@@ -7,7 +7,10 @@ jest.mock('./formatReactElementNode.js', () => node =>
 
 const createFakeReactElement = (tagName = 'Foo') =>
   React.createElement(tagName, {}, null);
-const options = { tabStop: 2 };
+const options = {
+  tabStop: 2,
+  isValidElement: React.isValidElement,
+};
 
 describe('formatComplexDataStructure', () => {
   it('should format an object', () => {

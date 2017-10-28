@@ -8,6 +8,7 @@ const defaultOptions = {
   tabStop: 2,
   useBooleanShorthandSyntax: true,
   sortProps: true,
+  isValidElement: React.isValidElement,
 };
 
 describe('formatReactElementNode', () => {
