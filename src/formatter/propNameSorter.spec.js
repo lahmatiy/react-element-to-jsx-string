@@ -1,5 +1,3 @@
-/* @flow */
-
 import propNameSorter from './propNameSorter';
 
 test('The propNameSorter should always move the `key` and `ref` keys first', () => {

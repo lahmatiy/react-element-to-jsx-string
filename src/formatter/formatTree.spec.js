@@ -1,5 +1,3 @@
-/* @flow */
-
 import formatTree from './formatTree';
 import formatTreeNode from './formatTreeNode';
 

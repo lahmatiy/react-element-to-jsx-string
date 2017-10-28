@@ -1,23 +1,15 @@
-/* @flow */
-
 import isPlainObject from 'is-plain-object';
 import { isValidElement } from 'react';
 import formatComplexDataStructure from './formatComplexDataStructure';
 import formatTreeNode from './formatTreeNode';
-import type { Options } from './../options';
-import parseReactElement from './../parser/parseReactElement';
+import parseReactElement from '../parser/parseReactElement';
 
 const noRefCheck = () => {};
-const escape = (s: string): string => s.replace(/"/g, '&quot;');
+const escape = s => s.replace(/"/g, '&quot;');
 
-const defaultFunctionValue = (fn: any): any => fn;
+const defaultFunctionValue = fn => fn;
 
-const formatPropValue = (
-  propValue: any,
-  inline: boolean,
-  lvl: number,
-  options: Options
-): string => {
+const formatPropValue = (propValue, inline, lvl, options) => {
   if (typeof propValue === 'number') {
     return `{${String(propValue)}}`;
   }
@@ -26,9 +18,6 @@ const formatPropValue = (
     return `"${escape(propValue)}"`;
   }
 
-  // > "Symbols (new in ECMAScript 2015, not yet supported in Flow)"
-  // @see: https://flow.org/en/docs/types/primitives/
-  // $FlowFixMe: Flow does not support Symbol
   if (typeof propValue === 'symbol') {
     const symbolDescription = propValue
       .valueOf()

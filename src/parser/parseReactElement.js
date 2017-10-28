@@ -1,15 +1,11 @@
-/* @flow */
-
-import * as React from 'react';
-import type { Options } from './../options';
+import React from 'react';
 import {
   createStringTreeNode,
   createNumberTreeNode,
   createReactElementTreeNode,
 } from './../tree';
-import type { TreeNode } from './../tree';
 
-const getReactElementDisplayName = (element: React.Element<*>): string =>
+const getReactElementDisplayName = element =>
   element.type.displayName ||
   element.type.name || // function name
   (typeof element.type === 'function' // function without a name, you should provide one
@@ -18,13 +14,13 @@ const getReactElementDisplayName = (element: React.Element<*>): string =>
 
 const noChildren = (propsValue, propName) => propName !== 'children';
 
-const onlyMeaningfulChildren = (children): boolean =>
+const onlyMeaningfulChildren = children =>
   children !== true &&
   children !== false &&
   children !== null &&
   children !== '';
 
-const filterProps = (originalProps: {}, cb: (any, string) => boolean) => {
+const filterProps = (originalProps, cb) => {
   const filteredProps = {};
 
   Object.keys(originalProps)
@@ -34,10 +30,7 @@ const filterProps = (originalProps: {}, cb: (any, string) => boolean) => {
   return filteredProps;
 };
 
-const parseReactElement = (
-  element: React.Element<*> | string | number,
-  options: Options
-): TreeNode => {
+const parseReactElement = (element, options) => {
   const { displayName: displayNameFn = getReactElementDisplayName } = options;
 
   if (typeof element === 'string') {

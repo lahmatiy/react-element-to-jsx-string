@@ -1,22 +1,14 @@
-/* @flow */
-
 import collapse from 'collapse-white-space';
 import { isValidElement } from 'react';
 import stringify from 'stringify-object';
 import sortobject from 'sortobject';
-import parseReactElement from './../parser/parseReactElement';
+import parseReactElement from '../parser/parseReactElement';
 import formatTreeNode from './formatTreeNode';
 import spacer from './spacer';
-import type { Options } from './../options';
 
 function noRefCheck() {}
 
-export default (
-  value: Object | Array<any>,
-  inline: boolean,
-  lvl: number,
-  options: Options
-): string => {
+export default (value, inline, lvl, options) => {
   const normalizedValue = sortobject(value);
 
   const stringifiedValue = stringify(normalizedValue, {

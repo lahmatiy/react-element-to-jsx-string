@@ -1,15 +1,12 @@
-/* @flow */
-
 import mergeSiblingPlainStringChildrenReducer from './mergeSiblingPlainStringChildrenReducer';
 import {
   createNumberTreeNode,
   createStringTreeNode,
   createReactElementTreeNode,
-} from './../tree';
-import type { TreeNode } from './../tree';
+} from '../tree';
 
 test('mergeSiblingPlainStringChildrenReducer should merge sibling string tree nodes', () => {
-  const childrens: TreeNode[] = [
+  const childrens = [
     createStringTreeNode('a'),
     createStringTreeNode('b'),
     createStringTreeNode('c'),
@@ -52,7 +49,7 @@ test('mergeSiblingPlainStringChildrenReducer should consider number as string', 
 });
 
 test('mergeSiblingPlainStringChildrenReducer should detect non string node', () => {
-  const childrens: TreeNode[] = [
+  const childrens = [
     createReactElementTreeNode('MyFoo', {}, {}, ['foo']),
     createStringTreeNode('a'),
     createNumberTreeNode('b'),

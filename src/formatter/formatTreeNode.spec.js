@@ -1,5 +1,3 @@
-/* @flow */
-
 import formatTreeNode from './formatTreeNode';
 
 jest.mock('./formatReactElementNode', () => () =>

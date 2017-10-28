@@ -1,14 +1,10 @@
-/* @flow */
-
 import formatReactElementNode from './formatReactElementNode';
-import type { Options } from './../options';
-import type { TreeNode } from './../tree';
 
 const jsxStopChars = ['<', '>', '{', '}'];
-const shouldBeEscaped = (s: string) =>
+const shouldBeEscaped = s =>
   jsxStopChars.some(jsxStopChar => s.includes(jsxStopChar));
 
-const escape = (s: string) => {
+const escape = s => {
   if (!shouldBeEscaped(s)) {
     return s;
   }
@@ -16,7 +12,7 @@ const escape = (s: string) => {
   return `{\`${s}\`}`;
 };
 
-const preserveTrailingSpace = (s: string) => {
+const preserveTrailingSpace = s => {
   let result = s;
   if (result.endsWith(' ')) {
     result = result.replace(/^(\S*)(\s*)$/, "$1{'$2'}");
@@ -29,12 +25,7 @@ const preserveTrailingSpace = (s: string) => {
   return result;
 };
 
-export default (
-  node: TreeNode,
-  inline: boolean,
-  lvl: number,
-  options: Options
-): string => {
+export default (node, inline, lvl, options) => {
   if (node.type === 'number') {
     return String(node.value);
   }

@@ -1,12 +1,10 @@
-/* @flow */
-
 import React from 'react';
 import formatPropValue from './formatPropValue';
-import parseReactElement from './../parser/parseReactElement';
+import parseReactElement from '../parser/parseReactElement';
 import formatTreeNode from './formatTreeNode';
 import formatComplexDataStructure from './formatComplexDataStructure';
 
-jest.mock('./../parser/parseReactElement');
+jest.mock('../parser/parseReactElement');
 jest.mock('./formatTreeNode', () =>
   jest.fn().mockReturnValue('<MockedFormatTreeNodeResult />')
 );

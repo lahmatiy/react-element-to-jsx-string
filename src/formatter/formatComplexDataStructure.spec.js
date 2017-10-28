@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 import formatComplexDataStructure from './formatComplexDataStructure';
 

@@ -1,5 +1,3 @@
-/* @flow */
-
 import formatProp from './formatProp';
 import formatPropValue from './formatPropValue';
 

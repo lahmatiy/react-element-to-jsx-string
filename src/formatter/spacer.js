@@ -1,6 +1,4 @@
-/* @flow */
-
-export default (times: number, tabStop: number): string => {
+export default (times, tabStop) => {
   if (times === 0) {
     return '';
   }

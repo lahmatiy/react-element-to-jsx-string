@@ -1,19 +1,15 @@
-/* @flow */
-
 import spacer from './spacer';
 import formatTreeNode from './formatTreeNode';
 import formatProp from './formatProp';
 import mergeSiblingPlainStringChildrenReducer from './mergeSiblingPlainStringChildrenReducer';
 import propNameSorter from './propNameSorter';
-import type { Options } from './../options';
-import type { ReactElementTreeNode } from './../tree';
 
 const compensateMultilineStringElementIndentation = (
   element,
-  formattedElement: string,
-  inline: boolean,
-  lvl: number,
-  options: Options
+  formattedElement,
+  inline,
+  lvl,
+  options
 ) => {
   const { tabStop } = options;
 
@@ -33,11 +29,7 @@ const compensateMultilineStringElementIndentation = (
   return formattedElement;
 };
 
-const formatOneChildren = (
-  inline: boolean,
-  lvl: number,
-  options: Options
-) => element =>
+const formatOneChildren = (inline, lvl, options) => element =>
   compensateMultilineStringElementIndentation(
     element,
     formatTreeNode(element, inline, lvl, options),
@@ -55,12 +47,12 @@ const onlyPropsWithOriginalValue = (defaultProps, props) => propName => {
 };
 
 const isInlineAttributeTooLong = (
-  attributes: string[],
-  inlineAttributeString: string,
-  lvl: number,
-  tabStop: number,
-  maxInlineAttributesLineLength: ?number
-): boolean => {
+  attributes,
+  inlineAttributeString,
+  lvl,
+  tabStop,
+  maxInlineAttributesLineLength
+) => {
   if (!maxInlineAttributesLineLength) {
     return attributes.length > 1;
   }
@@ -72,14 +64,14 @@ const isInlineAttributeTooLong = (
 };
 
 const shouldRenderMultilineAttr = (
-  attributes: string[],
-  inlineAttributeString: string,
-  containsMultilineAttr: boolean,
-  inline: boolean,
-  lvl: number,
-  tabStop: number,
-  maxInlineAttributesLineLength: ?number
-): boolean =>
+  attributes,
+  inlineAttributeString,
+  containsMultilineAttr,
+  inline,
+  lvl,
+  tabStop,
+  maxInlineAttributesLineLength
+) =>
   (isInlineAttributeTooLong(
     attributes,
     inlineAttributeString,
@@ -90,12 +82,7 @@ const shouldRenderMultilineAttr = (
     containsMultilineAttr) &&
   !inline;
 
-export default (
-  node: ReactElementTreeNode,
-  inline: boolean,
-  lvl: number,
-  options: Options
-): string => {
+export default (node, inline, lvl, options) => {
   const {
     type,
     displayName = '',

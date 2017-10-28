@@ -1,12 +1,8 @@
-/* @flow */
-
-import * as React from 'react';
 import formatTree from './formatter/formatTree';
 import parseReactElement from './parser/parseReactElement';
-import type { Options } from './options';
 
 const reactElementToJsxString = (
-  element: React.Element<any>,
+  element,
   {
     filterProps = [],
     showDefaultProps = true,
@@ -17,7 +13,7 @@ const reactElementToJsxString = (
     sortProps = true,
     maxInlineAttributesLineLength,
     displayName,
-  }: Options = {}
+  } = {}
 ) => {
   if (!element) {
     throw new Error('react-element-to-jsx-string: Expected a ReactElement');

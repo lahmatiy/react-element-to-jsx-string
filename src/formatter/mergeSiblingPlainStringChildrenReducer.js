@@ -1,12 +1,6 @@
-/* @flow */
+import { createStringTreeNode } from '../tree';
 
-import { createStringTreeNode } from './../tree';
-import type { TreeNode } from './../tree';
-
-export default (
-  previousNodes: TreeNode[],
-  currentNode: TreeNode
-): TreeNode[] => {
+export default (previousNodes, currentNode) => {
   const nodes = previousNodes.slice(
     0,
     previousNodes.length > 0 ? previousNodes.length - 1 : 0

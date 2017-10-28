@@ -1,23 +1,16 @@
-/* @flow */
-
 import spacer from './spacer';
 import formatPropValue from './formatPropValue';
-import type { Options } from './../options';
 
 export default (
-  name: string,
-  hasValue: boolean,
-  value: any,
-  hasDefaultValue: boolean,
-  defaultValue: any,
-  inline: boolean,
-  lvl: number,
-  options: Options
-): {
-  attributeFormattedInline: string,
-  attributeFormattedMultiline: string,
-  isMultilineAttribute: boolean,
-} => {
+  name,
+  hasValue,
+  value,
+  hasDefaultValue,
+  defaultValue,
+  inline,
+  lvl,
+  options
+) => {
   if (!hasValue && !hasDefaultValue) {
     throw new Error(
       `The prop "${name}" has no value and no default: could not be formatted`

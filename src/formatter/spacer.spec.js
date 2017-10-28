@@ -1,5 +1,3 @@
-/* @flow */
-
 import spacer from './spacer';
 
 describe('spacer', () => {

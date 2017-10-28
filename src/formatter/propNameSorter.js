@@ -1,6 +1,4 @@
-/* @flow */
-
-export default (sortProps: boolean) => (a: string, b: string): -1 | 0 | 1 => {
+export default sortProps => (a, b) => {
   if (a === b) {
     return 0;
   }

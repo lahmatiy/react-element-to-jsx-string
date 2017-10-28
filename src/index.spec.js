@@ -1,5 +1,3 @@
-/* @flow */
-
 /* eslint-disable react/no-string-refs */
 
 import React from 'react';
@@ -9,8 +7,8 @@ import AnonymousStatelessComponent from './AnonymousStatelessComponent';
 
 class TestComponent extends React.Component {}
 
-function NamedStatelessComponent(props: { children: React.Children }) {
-  const { children } = props;
+function NamedStatelessComponent(props) {
+  const { children } = props; // eslint-disable-line react/prop-types
   return <div>{children}</div>;
 }
 
