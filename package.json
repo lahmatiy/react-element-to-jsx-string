@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "babel ./src/ --ignore=*.spec.js --source-maps --out-dir ./dist/",
+    "build:bundle": "rollup -c | babel --presets es2015 --source-maps -f src/index.js -o ./dist/lib.js && uglifyjs ./dist/lib.js -o ./dist/lib.min.js",
     "lint": "node_modules/.bin/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
@@ -58,7 +59,11 @@
     "prettier": "1.7.4",
     "react": "16.0.0",
     "react-dom": "16.0.0",
-    "react-test-renderer": "16.0.0"
+    "react-test-renderer": "16.0.0",
+    "rollup": "^0.50.0",
+    "rollup-plugin-commonjs": "^8.2.5",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "uglify-js": "^3.1.5"
   },
   "peerDependencies": {
     "react": "^0.14.8 || ^15.0.1 || ^16.0.0"
