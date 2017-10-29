@@ -5,8 +5,15 @@ export default {
   name: 'createReactElementToJsxString',
   input: 'src/index.js',
   output: {
-    format: 'umd',
-    sourcemap: 'inline',
+    file: 'dist/lib.js',
+    format: 'cjs',
+    sourcemap: true,
   },
-  plugins: [resolve({ browser: true }), commonjs()],
+  plugins: [
+    resolve({
+      browser: true,
+      jsnext: true,
+    }),
+    commonjs(),
+  ],
 };

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "babel ./src/ --ignore=*.spec.js --source-maps --out-dir ./dist/",
-    "build:bundle": "rollup -c | babel --presets es2015 --source-maps -f src/index.js -o ./dist/lib.js && uglifyjs ./dist/lib.js -o ./dist/lib.min.js",
+    "build:bundle": "rollup -c && babel dist/lib.js --presets es2015 --source-maps -f src/index.js -o ./dist/lib.es5.js && uglifyjs ./dist/lib.es5.js -o ./dist/lib.es5.min.js",
     "lint": "node_modules/.bin/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
