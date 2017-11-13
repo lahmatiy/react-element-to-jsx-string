@@ -14,7 +14,10 @@ const options = {
 
 describe('formatComplexDataStructure', () => {
   it('should format an object', () => {
-    const fixture = { a: 1, b: { c: 'ccc' } };
+    const fixture = {
+      a: 1,
+      b: { c: 'ccc' },
+    };
 
     expect(formatComplexDataStructure(fixture, false, 0, options)).toEqual(
       `{
@@ -53,7 +56,15 @@ describe('formatComplexDataStructure', () => {
   });
 
   it('should format an array', () => {
-    const fixture = [1, '2', true, false, null];
+    const fixture = [
+      1,
+      '2',
+      true,
+      false,
+      null,
+      new Date('2017-11-13T00:00:00.000Z'),
+      /test/g,
+    ];
 
     expect(formatComplexDataStructure(fixture, false, 0, options)).toEqual(
       `[
@@ -61,16 +72,26 @@ describe('formatComplexDataStructure', () => {
     '2',
     true,
     false,
-    null
+    null,
+    new Date('2017-11-13T00:00:00.000Z'),
+    /test/g
   ]`
     );
   });
 
   it('should format inline an array ', () => {
-    const fixture = [1, '2', true, false, null];
+    const fixture = [
+      1,
+      '2',
+      true,
+      false,
+      null,
+      new Date('2017-11-13T00:00:00.000Z'),
+      /test/g,
+    ];
 
     expect(formatComplexDataStructure(fixture, true, 0, options)).toEqual(
-      "[1, '2', true, false, null]"
+      "[1, '2', true, false, null, new Date('2017-11-13T00:00:00.000Z'), /test/g]"
     );
   });
 
@@ -86,5 +107,25 @@ describe('formatComplexDataStructure', () => {
 
   it('should format an empty array', () => {
     expect(formatComplexDataStructure([], false, 0, options)).toEqual('[]');
+  });
+
+  it('should format an object that contains a date', () => {
+    const fixture = { a: new Date('2017-11-13T00:00:00.000Z') };
+
+    expect(formatComplexDataStructure(fixture, false, 0, options)).toEqual(
+      `{
+    a: new Date('2017-11-13T00:00:00.000Z')
+  }`
+    );
+  });
+
+  it('should format an object that contains a regexp', () => {
+    const fixture = { a: /test/g };
+
+    expect(formatComplexDataStructure(fixture, false, 0, options)).toEqual(
+      `{
+    a: /test/g
+  }`
+    );
   });
 });

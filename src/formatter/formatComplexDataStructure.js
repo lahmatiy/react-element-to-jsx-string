@@ -1,5 +1,5 @@
 import stringify from 'stringify-object';
-import sortobject from 'sortobject';
+import sortobject from './sortobject';
 import parseReactElement from '../parser/parseReactElement';
 import formatTreeNode from './formatTreeNode';
 import spacer from './spacer';
