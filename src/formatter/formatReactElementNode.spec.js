@@ -33,61 +33,6 @@ describe('formatReactElementNode', () => {
     );
   });
 
-  it('should respect preferInline', () => {
-    const options = { ...defaultOptions, preferInline: true };
-    const tree = {
-      type: 'ReactElement',
-      displayName: 'h1',
-      defaultProps: {},
-      props: {},
-      children: [
-        {
-          value: 'Hello world',
-          type: 'string',
-        },
-      ],
-    };
-
-    expect(formatReactElementNode(tree, false, 0, options)).toEqual(
-      `<h1>Hello world</h1>`
-    );
-  });
-
-  it('should not inline children on preferInline when any child is element', () => {
-    const options = { ...defaultOptions, preferInline: true };
-    const tree = {
-      type: 'ReactElement',
-      displayName: 'h1',
-      defaultProps: {},
-      props: {},
-      children: [
-        {
-          type: 'string',
-          value: 'Hello',
-        },
-        {
-          type: 'ReactElement',
-          displayName: 'br',
-          defaultProps: {},
-          props: {},
-          children: [],
-        },
-        {
-          type: 'string',
-          value: 'world',
-        },
-      ],
-    };
-
-    expect(formatReactElementNode(tree, false, 0, options)).toEqual(
-      `<h1>
-  Hello
-  <br />
-  world
-</h1>`
-    );
-  });
-
   it('should format a single depth react element', () => {
     const tree = {
       type: 'ReactElement',
@@ -178,5 +123,86 @@ describe('formatReactElementNode', () => {
       third line
     </div>`
     );
+  });
+
+  describe('preferInline', () => {
+    const options = { ...defaultOptions, preferInline: true };
+
+    it('should try inline when option is passed', () => {
+      const tree = {
+        type: 'ReactElement',
+        displayName: 'h1',
+        defaultProps: {},
+        props: {},
+        children: [
+          {
+            value: 'Hello world',
+            type: 'string',
+          },
+        ],
+      };
+
+      expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+        `<h1>Hello world</h1>`
+      );
+    });
+
+    it('should not inline any child is an element', () => {
+      const tree = {
+        type: 'ReactElement',
+        displayName: 'h1',
+        defaultProps: {},
+        props: {},
+        children: [
+          {
+            type: 'string',
+            value: 'Hello',
+          },
+          {
+            type: 'ReactElement',
+            displayName: 'br',
+            defaultProps: {},
+            props: {},
+            children: [],
+          },
+          {
+            type: 'string',
+            value: 'world',
+          },
+        ],
+      };
+
+      expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+        `<h1>
+  Hello
+  <br />
+  world
+</h1>`
+      );
+    });
+
+    it('should not inline when element contains a single empty element child', () => {
+      const tree = {
+        type: 'ReactElement',
+        displayName: 'h1',
+        defaultProps: {},
+        props: {},
+        children: [
+          {
+            type: 'ReactElement',
+            displayName: 'input',
+            defaultProps: {},
+            props: {},
+            children: [],
+          },
+        ],
+      };
+
+      expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+        `<h1>
+  <input />
+</h1>`
+      );
+    });
   });
 });

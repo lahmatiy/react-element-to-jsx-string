@@ -14,6 +14,7 @@ export default React =>
       sortProps = true,
       maxInlineAttributesLineLength,
       displayName,
+      preferInline,
     } = {}
   ) {
     if (!element) {
@@ -30,6 +31,7 @@ export default React =>
       sortProps,
       maxInlineAttributesLineLength,
       displayName,
+      preferInline,
       isValidElement: React.isValidElement,
     };
 

@@ -175,6 +175,7 @@ export default (node, inline, lvl, options) => {
       .join(`\n${spacer(newLvl, tabStop)}`);
     const multiline =
       !preferInline ||
+      hasElements ||
       multilineAttrOutput ||
       childrenStr.length > 80 ||
       childrenStr.indexOf('\n') !== -1;
