@@ -126,9 +126,8 @@ describe('formatReactElementNode', () => {
   });
 
   describe('preferInline', () => {
-    const options = { ...defaultOptions, preferInline: true };
-
     it('should try inline when option is passed', () => {
+      const options = { ...defaultOptions, preferInline: true };
       const tree = {
         type: 'ReactElement',
         displayName: 'h1',
@@ -148,6 +147,7 @@ describe('formatReactElementNode', () => {
     });
 
     it('should not inline any child is an element', () => {
+      const options = { ...defaultOptions, preferInline: true };
       const tree = {
         type: 'ReactElement',
         displayName: 'h1',
@@ -182,6 +182,7 @@ describe('formatReactElementNode', () => {
     });
 
     it('should not inline when element contains a single empty element child', () => {
+      const options = { ...defaultOptions, preferInline: true };
       const tree = {
         type: 'ReactElement',
         displayName: 'h1',
@@ -201,6 +202,58 @@ describe('formatReactElementNode', () => {
       expect(formatReactElementNode(tree, false, 0, options)).toEqual(
         `<h1>
   <input />
+</h1>`
+      );
+    });
+
+    it('should not root when preferInline: exceptRoot', () => {
+      const options = { ...defaultOptions, preferInline: 'exceptRoot' };
+      const tree = {
+        type: 'ReactElement',
+        displayName: 'h1',
+        defaultProps: {},
+        props: {},
+        children: [
+          {
+            type: 'string',
+            value: "shouldn't be inlined",
+          },
+        ],
+      };
+
+      expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+        `<h1>
+  shouldn't be inlined
+</h1>`
+      );
+    });
+
+    it('should inline non-root elements when preferInline: exceptRoot', () => {
+      const options = { ...defaultOptions, preferInline: 'exceptRoot' };
+      const tree = {
+        type: 'ReactElement',
+        displayName: 'h1',
+        defaultProps: {},
+        props: {},
+        children: [
+          {
+            type: 'ReactElement',
+            displayName: 'div',
+            defaultProps: {},
+            props: {},
+            children: [
+              {
+                type: 'string',
+                value: 'should be inlined',
+              },
+            ],
+          },
+        ],
+      };
+
+      expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+        `<h1>
+  <div>should be inlined</div>
 </h1>`
       );
     });
