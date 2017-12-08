@@ -103,4 +103,14 @@ describe('formatComplexDataStructure', () => {
       `{a: /test/g}`
     );
   });
+
+  it('should not hang up on circular refs', () => {
+    const fixture = {};
+
+    fixture.fixture = fixture;
+
+    expect(formatComplexDataStructure(fixture, true, 0, options)).toEqual(
+      `{fixture: "[Circular]"}`
+    );
+  });
 });

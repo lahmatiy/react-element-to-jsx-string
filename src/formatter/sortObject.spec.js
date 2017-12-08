@@ -32,4 +32,24 @@ describe('formatComplexDataStructure', () => {
       c: date,
     });
   });
+
+  it('should not hang up when object contains recursive refs', () => {
+    const fixture = {
+      nestedObject: { xyz: 1 },
+      nestedArray: [],
+    };
+
+    fixture.nestedObject.recursive = fixture.nestedObject;
+    fixture.nestedArray.push(fixture.nestedObject);
+
+    const actual = sortObject(fixture);
+
+    expect(actual).toEqual({
+      nestedObject: {
+        recursive: actual.nestedObject,
+        xyz: 1,
+      },
+      nestedArray: [actual.nestedObject],
+    });
+  });
 });

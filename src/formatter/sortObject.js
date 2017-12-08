@@ -1,4 +1,15 @@
-export default function sortObject(value) {
+function findInStack(stack, value) {
+  for (let i = 0; i < stack.length; i++) {
+    const entry = stack[i];
+    if (entry.value === value) {
+      return entry.result;
+    }
+  }
+
+  return false;
+}
+
+function sortObject(value, stack) {
   // return non-object value as is
   if (value === null || typeof value !== 'object') {
     return value;
@@ -9,17 +20,31 @@ export default function sortObject(value) {
     return value;
   }
 
-  // make a copy of array with each item passed through sortObject()
-  if (Array.isArray(value)) {
-    return value.map(sortObject);
+  const stackResult = findInStack(stack, value);
+
+  if (stackResult) {
+    return stackResult;
   }
 
-  // make a copy of object with key sorted
-  return Object.keys(value)
-    .sort()
-    .reduce((result, key) => {
-      // eslint-disable-next-line no-param-reassign
-      result[key] = sortObject(value[key]);
-      return result;
-    }, {});
+  const isArray = Array.isArray(value);
+  const result = isArray ? new Array(value.length) : {};
+  const extendedStack = stack.concat({ value, result });
+
+  if (isArray) {
+    // make a copy of array with each item passed through sortObject()
+    value.forEach((item, index) => {
+      result[index] = sortObject(item, extendedStack);
+    });
+  } else {
+    // make a copy of object with key sorted
+    Object.keys(value)
+      .sort()
+      .forEach(key => {
+        result[key] = sortObject(value[key], extendedStack);
+      });
+  }
+
+  return result;
 }
+
+export default value => sortObject(value, []);
