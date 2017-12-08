@@ -1,4 +1,4 @@
-import sortObject from './sortObject';
+import sortObject from './sort-object';
 
 describe('formatComplexDataStructure', () => {
   it('should sort keys in objects', () => {

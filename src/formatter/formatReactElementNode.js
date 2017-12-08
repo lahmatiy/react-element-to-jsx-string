@@ -81,6 +81,7 @@ export default (node, inline, lvl, options) => {
     showDefaultProps,
     sortProps,
     tabStop,
+    preferInline,
   } = options;
 
   let out = `<${displayName}`;
@@ -88,6 +89,7 @@ export default (node, inline, lvl, options) => {
   let outInlineAttr = out;
   let outMultilineAttr = out;
   let containsMultilineAttr = false;
+  let multilineAttrOutput = false;
 
   const propNames = Object.keys(props);
   const defaultPropNames = Object.keys(defaultProps);
@@ -147,6 +149,7 @@ export default (node, inline, lvl, options) => {
       maxInlineAttributesLineLength
     )
   ) {
+    multilineAttrOutput = true;
     out = outMultilineAttr;
   } else {
     out = outInlineAttr;
@@ -154,20 +157,38 @@ export default (node, inline, lvl, options) => {
 
   if (children && children.length > 0) {
     const newLvl = lvl + 1;
+    const normalizedChildren = children.reduce(
+      mergeSiblingPlainStringChildrenReducer,
+      []
+    );
+    const hasElements = normalizedChildren.some(
+      child => child.type === 'ReactElement'
+    );
+    const childrenStr = normalizedChildren
+      .map(
+        formatOneChildren(
+          inline || (preferInline && !hasElements),
+          newLvl,
+          options
+        )
+      )
+      .join(`\n${spacer(newLvl, tabStop)}`);
+    const multiline =
+      !preferInline ||
+      multilineAttrOutput ||
+      childrenStr.length > 80 ||
+      childrenStr.indexOf('\n') !== -1;
 
     out += '>';
 
-    if (!inline) {
+    if (!inline && multiline) {
       out += '\n';
       out += spacer(newLvl, tabStop);
     }
 
-    out += children
-      .reduce(mergeSiblingPlainStringChildrenReducer, [])
-      .map(formatOneChildren(inline, newLvl, options))
-      .join(`\n${spacer(newLvl, tabStop)}`);
+    out += childrenStr;
 
-    if (!inline) {
+    if (!inline && multiline) {
       out += '\n';
       out += spacer(newLvl - 1, tabStop);
     }

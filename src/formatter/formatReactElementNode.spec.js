@@ -33,6 +33,61 @@ describe('formatReactElementNode', () => {
     );
   });
 
+  it('should respect preferInline', () => {
+    const options = { ...defaultOptions, preferInline: true };
+    const tree = {
+      type: 'ReactElement',
+      displayName: 'h1',
+      defaultProps: {},
+      props: {},
+      children: [
+        {
+          value: 'Hello world',
+          type: 'string',
+        },
+      ],
+    };
+
+    expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+      `<h1>Hello world</h1>`
+    );
+  });
+
+  it('should not inline children on preferInline when any child is element', () => {
+    const options = { ...defaultOptions, preferInline: true };
+    const tree = {
+      type: 'ReactElement',
+      displayName: 'h1',
+      defaultProps: {},
+      props: {},
+      children: [
+        {
+          type: 'string',
+          value: 'Hello',
+        },
+        {
+          type: 'ReactElement',
+          displayName: 'br',
+          defaultProps: {},
+          props: {},
+          children: [],
+        },
+        {
+          type: 'string',
+          value: 'world',
+        },
+      ],
+    };
+
+    expect(formatReactElementNode(tree, false, 0, options)).toEqual(
+      `<h1>
+  Hello
+  <br />
+  world
+</h1>`
+    );
+  });
+
   it('should format a single depth react element', () => {
     const tree = {
       type: 'ReactElement',
