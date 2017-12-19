@@ -30,14 +30,6 @@ const filterProps = props => {
   return filteredProps;
 };
 
-const childrenToArray = children => {
-  if (Array.isArray(children)) {
-    return children;
-  }
-
-  return children ? [children] : [];
-};
-
 /* eslint-disable no-use-before-define */
 export default function parse(root, options) {
   function parseReactElement(element) {
@@ -58,7 +50,7 @@ export default function parse(root, options) {
 
     const props = filterProps(element.props);
     const defaultProps = filterProps(element.type.defaultProps || {});
-    const children = childrenToArray(element.props.children)
+    const children = Children.toArray(element.props.children)
       .filter(onlyMeaningfulChildren)
       .map(parseReactElement);
 
@@ -79,7 +71,11 @@ export default function parse(root, options) {
     );
   }
 
-  const { displayName = getReactElementDisplayName, isValidElement } = options;
+  const {
+    displayName = getReactElementDisplayName,
+    isValidElement,
+    Children,
+  } = options;
 
   return parseReactElement(root);
 }

@@ -9,6 +9,7 @@ const defaultOptions = {
   useBooleanShorthandSyntax: true,
   sortProps: true,
   isValidElement: React.isValidElement,
+  Children: React.Children,
 };
 
 describe('formatReactElementNode', () => {

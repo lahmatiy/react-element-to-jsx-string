@@ -10,6 +10,7 @@ const createFakeReactElement = (tagName = 'Foo') =>
 const options = {
   tabStop: 2,
   isValidElement: React.isValidElement,
+  Children: React.Children,
 };
 
 describe('formatComplexDataStructure', () => {

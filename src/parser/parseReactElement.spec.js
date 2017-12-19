@@ -3,7 +3,12 @@ import parseReactElement from './parseReactElement';
 
 const options = {
   isValidElement: React.isValidElement,
+  Children: React.Children,
 };
+
+function Nested() {
+  return <span />;
+}
 
 describe('parseReactElement', () => {
   it('should parse a react element with a string as children', () => {
@@ -149,6 +154,42 @@ describe('parseReactElement', () => {
         ref: 'foo',
       },
       children: [],
+    });
+  });
+
+  it.skip('should process nested components in props', () => {
+    const jsx = parseReactElement(
+      <div foo={{ bar: 1, baz: <Nested /> }}>
+        <Nested />
+      </div>,
+      options
+    );
+
+    expect(jsx).toEqual({
+      type: 'ReactElement',
+      displayName: 'div',
+      defaultProps: {},
+      props: {
+        foo: {
+          bar: 1,
+          baz: {
+            type: 'ReactElement',
+            displayName: 'Nested',
+            defaultProps: {},
+            props: {},
+            children: [],
+          },
+        },
+      },
+      children: [
+        {
+          type: 'ReactElement',
+          displayName: 'Nested',
+          defaultProps: {},
+          props: {},
+          children: [],
+        },
+      ],
     });
   });
 });

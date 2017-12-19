@@ -33,6 +33,7 @@ export default React =>
       displayName,
       preferInline,
       isValidElement: React.isValidElement,
+      Children: React.Children,
     };
 
     return formatTree(parseReactElement(element, options), options);
