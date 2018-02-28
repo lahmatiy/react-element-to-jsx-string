@@ -4,8 +4,13 @@ import formatTreeNode from './formatTreeNode';
 import parseReactElement from '../parser/parseReactElement';
 
 const noRefCheck = () => {};
-const escape = s => s.replace(/"/g, '&quot;');
 const defaultFunctionValue = fn => fn;
+const escapeSingleQuotes = s => s.replace(/'/g, '&apos;');
+const escapeDoubleQuotes = s => s.replace(/"/g, '&quot;');
+const quotedString = (value, { singleQuotes }) =>
+  singleQuotes
+    ? `'${escapeSingleQuotes(value)}'`
+    : `"${escapeDoubleQuotes(value)}"`;
 
 export default (propValue, inline, lvl, options) => {
   switch (typeof propValue) {
@@ -13,12 +18,13 @@ export default (propValue, inline, lvl, options) => {
       return `{${String(propValue)}}`;
 
     case 'string':
-      return `"${escape(propValue)}"`;
+      return quotedString(propValue, options);
 
     case 'symbol':
       return String(propValue).replace(
         /^Symbol\((.*)\)$/,
-        (m, ref) => (ref ? `{Symbol('${ref}')}` : `{Symbol()}`)
+        (m, ref) =>
+          ref ? `{Symbol(${quotedString(ref, options)})}` : `{Symbol()}`
       );
 
     case 'function': {
@@ -42,7 +48,7 @@ export default (propValue, inline, lvl, options) => {
   }
 
   if (propValue instanceof Date) {
-    return `{new Date("${propValue.toISOString()}")}`;
+    return `{new Date(${quotedString(propValue.toISOString(), options)})}`;
   }
 
   if (isPlainObject(propValue) || Array.isArray(propValue)) {

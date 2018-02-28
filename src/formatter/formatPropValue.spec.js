@@ -33,7 +33,7 @@ describe('formatPropValue', () => {
 
   it('should format a symbol prop value', () => {
     expect(formatPropValue(Symbol('Foo'), false, 0, options)).toBe(
-      "{Symbol('Foo')}"
+      '{Symbol("Foo")}'
     );
 
     // eslint-disable-next-line symbol-description
@@ -132,5 +132,32 @@ describe('formatPropValue', () => {
     expect(formatPropValue(new Map(), false, 0, options)).toBe(
       '{[object Map]}'
     );
+  });
+
+  describe('singleQuote=true', () => {
+    it('should escape single quote on prop value of string type', () => {
+      expect(
+        formatPropValue('Hello "Jonh" \'Don\'!', false, 0, {
+          singleQuotes: true,
+        })
+      ).toBe('\'Hello "Jonh" &apos;Don&apos;!\'');
+    });
+
+    it('should format a date prop value', () => {
+      expect(
+        formatPropValue(new Date('2017-01-01T11:00:00.000Z'), false, 0, {
+          isValidElement: React.isValidElement,
+          singleQuotes: true,
+        })
+      ).toBe("{new Date('2017-01-01T11:00:00.000Z')}");
+    });
+
+    it('should format a symbol prop value', () => {
+      expect(
+        formatPropValue(Symbol('Foo'), false, 0, {
+          singleQuotes: true,
+        })
+      ).toBe("{Symbol('Foo')}");
+    });
   });
 });
