@@ -113,7 +113,7 @@ describe('formatProp', () => {
     expect(formatPropValue).toHaveBeenCalledWith(false, true, 0, options);
   });
 
-  it('should format a truthy boolean prop (with explicit synthax)', () => {
+  it('should format a truthy boolean prop (with explicit syntax)', () => {
     const options = {
       useBooleanShorthandSyntax: false,
       tabStop: 2,
@@ -133,7 +133,7 @@ describe('formatProp', () => {
     expect(formatPropValue).toHaveBeenCalledWith(true, true, 0, options);
   });
 
-  it('should format a falsy boolean prop (with explicit synthax)', () => {
+  it('should format a falsy boolean prop (with explicit syntax)', () => {
     const options = {
       useBooleanShorthandSyntax: false,
       tabStop: 2,

@@ -20,3 +20,9 @@ export const createReactElementTreeNode = (
   defaultProps,
   children,
 });
+
+export const createReactFragmentTreeNode = (key, children) => ({
+  type: 'ReactFragment',
+  key,
+  children,
+});

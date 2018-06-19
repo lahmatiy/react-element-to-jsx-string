@@ -11,6 +11,7 @@ export default React =>
       functionValue,
       tabStop = 2,
       useBooleanShorthandSyntax = true,
+      useFragmentShortSyntax = true,
       sortProps = true,
       maxInlineAttributesLineLength,
       displayName,
@@ -30,6 +31,7 @@ export default React =>
       functionValue,
       tabStop,
       useBooleanShorthandSyntax,
+      useFragmentShortSyntax,
       sortProps,
       maxInlineAttributesLineLength,
       displayName,
@@ -38,6 +40,7 @@ export default React =>
       markElement,
       isValidElement: React.isValidElement,
       Children: React.Children,
+      Fragment: React.Fragment,
     };
 
     return formatTree(parseReactElement(element, options), options);

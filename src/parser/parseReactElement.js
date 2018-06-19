@@ -2,6 +2,7 @@ import {
   createStringTreeNode,
   createNumberTreeNode,
   createReactElementTreeNode,
+  createReactFragmentTreeNode,
 } from '../tree';
 
 const { hasOwnProperty } = Object.prototype;
@@ -11,6 +12,11 @@ const getReactElementDisplayName = element =>
   (typeof element.type === 'function' // function without a name, you should provide one
     ? 'No Display Name'
     : element.type);
+
+const getKey = element =>
+  typeof element.key === 'string' && element.key[0] !== '.'
+    ? element.key
+    : null;
 
 const onlyMeaningfulChildren = children =>
   children !== true &&
@@ -32,6 +38,12 @@ const filterProps = props => {
 
 /* eslint-disable no-use-before-define */
 export default function parse(root, options) {
+  function getChildren(element) {
+    return Children.toArray(element.props.children)
+      .filter(onlyMeaningfulChildren)
+      .map(parseReactElement);
+  }
+
   function parseReactElement(element) {
     switch (typeof element) {
       case 'string':
@@ -48,6 +60,10 @@ export default function parse(root, options) {
         }
     }
 
+    if (element.type === Fragment) {
+      return createReactFragmentTreeNode(getKey(element), getChildren(element));
+    }
+
     const name = displayName(element);
     const props = filterProps(element.props);
     const defaultProps = filterProps(element.type.defaultProps || {});
@@ -56,22 +72,20 @@ export default function parse(root, options) {
       markElement(element, name);
     }
 
-    if (element.ref !== null) {
-      props.ref = element.ref;
-    }
-
     if (typeof element.key === 'string' && element.key[0] !== '.') {
       // React automatically add key=".X" when there are some children
       props.key = element.key;
+    }
+
+    if (element.ref !== null) {
+      props.ref = element.ref;
     }
 
     return createReactElementTreeNode(
       name,
       props,
       defaultProps,
-      Children.toArray(element.props.children)
-        .filter(onlyMeaningfulChildren)
-        .map(parseReactElement)
+      getChildren(element)
     );
   }
 
@@ -79,6 +93,7 @@ export default function parse(root, options) {
     displayName = getReactElementDisplayName,
     isValidElement,
     Children,
+    Fragment,
     markElement,
   } = options;
 

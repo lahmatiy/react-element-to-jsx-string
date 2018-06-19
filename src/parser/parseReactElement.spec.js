@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment, Children } from 'react';
 import parseReactElement from './parseReactElement';
 
 const options = {
   isValidElement: React.isValidElement,
-  Children: React.Children,
+  Children,
+  Fragment,
 };
 
 function Nested() {
@@ -221,6 +222,37 @@ describe('parseReactElement', () => {
         {
           type: 'ReactElement',
           displayName: 'Nested',
+          defaultProps: {},
+          props: {},
+          children: [],
+        },
+      ],
+    });
+  });
+
+  it('should parse a react fragment', () => {
+    expect(
+      parseReactElement(
+        <Fragment key="foo">
+          <div />
+          <div />
+        </Fragment>,
+        options
+      )
+    ).toEqual({
+      type: 'ReactFragment',
+      key: 'foo',
+      children: [
+        {
+          type: 'ReactElement',
+          displayName: 'div',
+          defaultProps: {},
+          props: {},
+          children: [],
+        },
+        {
+          type: 'ReactElement',
+          displayName: 'div',
           defaultProps: {},
           props: {},
           children: [],
