@@ -157,6 +157,42 @@ describe('parseReactElement', () => {
     });
   });
 
+  it('should parse when children contains an array', () => {
+    const array = [1, 2];
+
+    expect(
+      parseReactElement(
+        <div>
+          <span />
+          {array}
+        </div>,
+        options
+      )
+    ).toEqual({
+      type: 'ReactElement',
+      displayName: 'div',
+      defaultProps: {},
+      props: {},
+      children: [
+        {
+          type: 'ReactElement',
+          displayName: 'span',
+          defaultProps: {},
+          props: {},
+          children: [],
+        },
+        {
+          type: 'number',
+          value: 1,
+        },
+        {
+          type: 'number',
+          value: 2,
+        },
+      ],
+    });
+  });
+
   it.skip('should process nested components in props', () => {
     const jsx = parseReactElement(
       <div foo={{ bar: 1, baz: <Nested /> }}>
