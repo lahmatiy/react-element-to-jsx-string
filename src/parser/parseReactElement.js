@@ -48,11 +48,13 @@ export default function parse(root, options) {
         }
     }
 
+    const name = displayName(element);
     const props = filterProps(element.props);
     const defaultProps = filterProps(element.type.defaultProps || {});
-    const children = Children.toArray(element.props.children)
-      .filter(onlyMeaningfulChildren)
-      .map(parseReactElement);
+
+    if (typeof markElement === 'function') {
+      markElement(element, name);
+    }
 
     if (element.ref !== null) {
       props.ref = element.ref;
@@ -64,10 +66,12 @@ export default function parse(root, options) {
     }
 
     return createReactElementTreeNode(
-      displayName(element),
+      name,
       props,
       defaultProps,
-      children
+      Children.toArray(element.props.children)
+        .filter(onlyMeaningfulChildren)
+        .map(parseReactElement)
     );
   }
 
@@ -75,6 +79,7 @@ export default function parse(root, options) {
     displayName = getReactElementDisplayName,
     isValidElement,
     Children,
+    markElement,
   } = options;
 
   return parseReactElement(root);

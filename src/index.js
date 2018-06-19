@@ -16,6 +16,7 @@ export default React =>
       displayName,
       preferInline = false,
       singleQuotes = false,
+      markElement = null,
     } = {}
   ) {
     if (!element) {
@@ -34,6 +35,7 @@ export default React =>
       displayName,
       preferInline,
       singleQuotes,
+      markElement,
       isValidElement: React.isValidElement,
       Children: React.Children,
     };
